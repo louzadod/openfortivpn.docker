@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/mgutz/ansi"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"os"
 )
@@ -48,6 +49,7 @@ func main() {
 			os.Exit(1)
 		case 1:
 			fmt.Printf("\r%s Só há um certificado elegível no token. Selecionado automaticamente:\n", blueDot)
+			fmt.Printf("  %s\n", ansi.Color(tokenCerts[0].name, "white+d"))
 			config.UserCert.SetValue(tokenCerts[0].url)
 		default:
 			sel(config.UserCert, certQuestion, tokenCerts)

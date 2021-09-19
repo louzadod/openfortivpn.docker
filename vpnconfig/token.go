@@ -12,6 +12,11 @@ import (
 	"time"
 )
 
+type TokenCert struct {
+	name string
+	url  string
+}
+
 var tlsConfig = tls.Config{InsecureSkipVerify: true}
 var netDialer = net.Dialer{Timeout: 10 * time.Second}
 
@@ -44,11 +49,6 @@ func getCertByURL(certUrl string) (TokenCert, error) {
 		name: fmt.Sprintf("%s [%s]", cert.Subject.CommonName, cert.Issuer.CommonName),
 		url:  certUrl,
 	}, nil
-}
-
-type TokenCert struct {
-	name string
-	url  string
 }
 
 func listCerts(ch chan<- []TokenCert) {

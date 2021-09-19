@@ -44,8 +44,10 @@ func main() {
 		tokenCerts := <-tokenChan
 		switch totalCerts := len(tokenCerts); totalCerts {
 		case 0:
-			fmt.Println("\rErro: Nenhum certificado foi encontrado")
-			fmt.Println("Ou o token não foi inserido ou há mais de um token conectado")
+			fmt.Printf("\r%s Erro! Nenhum certificado foi encontrado.\n", redDot)
+			fmt.Println("  - O token foi inserido?")
+			fmt.Println("  - Existe algum certificado elegível no token?")
+			fmt.Println("  - Há mais de um token conectado?")
 			os.Exit(1)
 		case 1:
 			fmt.Printf("\r%s Só há um certificado elegível no token. Selecionado automaticamente:\n", blueDot)

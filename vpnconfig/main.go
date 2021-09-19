@@ -47,7 +47,8 @@ func main() {
 			fmt.Println("Ou o token não foi inserido ou há mais de um token conectado")
 			os.Exit(1)
 		case 1:
-			fmt.Printf("\r%s Só há um certificado elegível no token. Selecionado automaticamente\n", redDot)
+			fmt.Printf("\r%s Só há um certificado elegível no token. Selecionado automaticamente:\n", blueDot)
+			config.UserCert.SetValue(tokenCerts[0].url)
 		default:
 			sel(config.UserCert, certQuestion, tokenCerts)
 		}

@@ -61,11 +61,9 @@ func listCerts(ch chan<- []TokenCert) {
 	subjects := make([]TokenCert, 0, len(certsUrls))
 
 	for _, certUrl := range certsUrls {
-		output, err = exec.Command("p11tool", "--export", certUrl).Output()
-		if err != nil {
+		if cert, err = getCertByURL(certUrl); err != nil {
 			continue
 		}
-		cert, err = getCertByURL(certUrl)
 		if cert.url != "" {
 			subjects = append(subjects, cert)
 		}

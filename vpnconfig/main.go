@@ -15,7 +15,7 @@ func main() {
 	kingpin.Parse()
 
 	config := LoadConfig(*cfg)
-	if config.IsComplete() {
+	if !*reconfigure && config.IsComplete() {
 		os.Exit(0)
 	}
 

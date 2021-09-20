@@ -26,3 +26,7 @@ func LoadConfig(cfgFile string) VPNConfig {
 		TrustedCert: section.Key("trusted-cert"),
 	}
 }
+
+func (c VPNConfig) IsComplete() bool {
+	return c.Host.Value() != "" && c.Port.Value() != "" && c.UserCert.Value() != "" && c.TrustedCert.Value() != ""
+}

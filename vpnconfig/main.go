@@ -14,10 +14,13 @@ func main() {
 	var err error
 	kingpin.Parse()
 
+	config := LoadConfig(*cfg)
+	if config.IsComplete() {
+		os.Exit(0)
+	}
+
 	tokenChan := make(chan []TokenCert, 1)
 	go listCerts(tokenChan)
-
-	config := LoadConfig(*cfg)
 
 	if *reconfigure || config.Host.Value() == "" {
 		answer := ask(config.Host.Value(), ipQuestion, ipValidate)

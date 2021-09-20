@@ -1,19 +1,20 @@
 # FortiClient VPN no Linux com token Aladdin eToken Pro
 
-Crie o `alias` de execução e coloque no inicializador do seu shell (`~/.zshrc`, `~/.bashrc`, ...):
+Clone este repositório e construa a imagem:
+
+```bash
+docker build -t openfortivpn:latest .
+```
+
+Crie o `alias` de execução adicionando o seguinte trecho ao arquivo de inicialização do seu shell (`~/.bashrc` se você usa Bash; `~/.zshrc`, se ZSH):
 
 ```bash
 # `sudo` é opcional se seu usário pertencer ao grupo `docker`
-alias vpn="sudo docker run --rm -ti --network=host --privileged -v ~/.config/openfortivpn:/vpn -v /etc/resolv.conf:/etc/resolv.conf registry.senado.leg.br/fparente/openfortivpn:latest"
+alias vpn="sudo docker run --rm -ti --network=host --privileged -v ~/.config/openfortivpn:/vpn -v /etc/resolv.conf:/etc/resolv.conf openfortivpn"
 ```
 
-Crie o arquivo `~/.config/openfortivpn/config.cfg` com o conteúdo:
-
-```ini
-host = IP do gateway
-port = Porta do gateway
-# user-cert e trusted-cert serão deduzidos automaticamente
-```
+> **Atenção!** A criação do `alias` não afeta os terminais que já estavam abertos. Portanto, após ajustar
+o arquivo de inicialização do shell, abra um outro terminal ou recarregue-o com `source ~/.bashrc` ou `source ~/.zshrc)`.
 
 Inicie a VPN:
 
@@ -22,3 +23,9 @@ vpn
 ```
 
 E só! 🤓
+
+## Atalhos
+
+* `vpn reconfigure`: abre formulário de configuração da VPN
+* `vpn edit`: permite edição manual do arquivo de configuração
+* `vpn p11tool`: p11tool, programa que permite operar dispositivos #PKCS11

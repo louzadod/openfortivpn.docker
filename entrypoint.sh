@@ -11,6 +11,8 @@ case $command in
     exec p11tool "${@: 2}";;
   reconfigure)
     exec vpnconfig --reconfigure /vpn/config.cfg;;
+  edit)
+    exec nano /vpn/config.cfg;;
   start)
     vpnconfig /vpn/config.cfg
     exec openfortivpn --seclevel-1 --config /vpn/config.cfg;;

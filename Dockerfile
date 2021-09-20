@@ -11,6 +11,7 @@ RUN set -ex;                                    \
     apt-get install -y --no-install-recommends  \
       gnutls-bin                                \
       libengine-pkcs11-openssl                  \
+      nano                                      \
       openfortivpn                              \
       openssl                                   \
       pcscd                                     \

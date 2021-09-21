@@ -14,7 +14,7 @@ alias vpn="sudo docker run --rm -ti --network=host --privileged -v ~/.config/ope
 ```
 
 > **Atenção!** A criação do `alias` não afeta os terminais que já estavam abertos. Portanto, após ajustar
-o arquivo de inicialização do shell, abra um outro terminal ou recarregue-o com `source ~/.bashrc` ou `source ~/.zshrc)`.
+o arquivo de inicialização do shell, abra um outro terminal ou recarregue-o com `source ~/.bashrc` ou `source ~/.zshrc`.
 
 Inicie a VPN:
 

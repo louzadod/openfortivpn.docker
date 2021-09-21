@@ -40,8 +40,8 @@ func getCertByURL(certUrl string) (TokenCert, error) {
 	}
 	block, _ := pem.Decode(pemBytes)
 	cert, _ := x509.ParseCertificate(block.Bytes)
-	// ignora certs com a capacidade de assinar outros certs (CA)
-	if cert.KeyUsage&x509.KeyUsageCertSign != 0 {
+	// não considera certificados CA
+	if cert.IsCA {
 		return TokenCert{}, nil
 	}
 

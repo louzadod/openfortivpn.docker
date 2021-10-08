@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/mgutz/ansi"
 	"gopkg.in/alecthomas/kingpin.v2"
-	"os"
 )
 
 var cfg = kingpin.Arg("file", "Arquivo de configuração.").Required().ExistingFile()
@@ -20,7 +21,7 @@ func main() {
 	}
 
 	tokenChan := make(chan []TokenCert, 1)
-	go listCerts(tokenChan)
+	go ListCerts(tokenChan)
 
 	if *reconfigure || config.Host.Value() == "" {
 		answer := ask(config.Host.Value(), ipQuestion, ipValidate)
@@ -62,7 +63,7 @@ func main() {
 
 		if confirm(savePinQuestion) {
 			pinValue := password(enterPinQuestion)
-			config.UserCert.SetValue(fmt.Sprintf("%s;pin-value=%s", config.UserCert.Value(), pinValue))
+			config.UserCert.SetValue(fmt.Sprintf("%spin-value=%s", config.UserCert.Value(), pinValue))
 		}
 	}
 

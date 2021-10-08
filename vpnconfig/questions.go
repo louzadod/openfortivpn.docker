@@ -2,12 +2,13 @@ package main
 
 import (
 	"errors"
-	"github.com/AlecAivazis/survey/v2"
-	"github.com/AlecAivazis/survey/v2/terminal"
-	"gopkg.in/ini.v1"
 	"net"
 	"os"
 	"strconv"
+
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/AlecAivazis/survey/v2/terminal"
+	"gopkg.in/ini.v1"
 )
 
 func ipValidate(ip interface{}) error {

@@ -9,7 +9,6 @@ FROM ubuntu:21.04
 RUN set -ex;                                    \
     apt-get update;                             \
     apt-get install -y --no-install-recommends  \
-      gnutls-bin                                \
       libengine-pkcs11-openssl                  \
       nano                                      \
       openfortivpn                              \

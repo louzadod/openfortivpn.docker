@@ -7,8 +7,6 @@ command=$1
 touch /vpn/config.cfg
 
 case $command in
-  p11tool)
-    exec p11tool "${@: 2}";;
   reconfigure)
     exec vpnconfig --reconfigure /vpn/config.cfg;;
   edit)

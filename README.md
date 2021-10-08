@@ -28,4 +28,3 @@ E só! 🤓
 
 * `vpn reconfigure`: abre formulário de configuração da VPN
 * `vpn edit`: permite edição manual do arquivo de configuração
-* `vpn p11tool`: p11tool, programa que permite operar dispositivos #PKCS11

@@ -4,7 +4,6 @@ import (
 	"crypto/x509"
 	"fmt"
 	"github.com/miekg/pkcs11"
-	"log"
 	"net/url"
 	"strings"
 )
@@ -24,7 +23,6 @@ var attrTemplate = []*pkcs11.Attribute{
 }
 
 func ListCerts(ch chan<- []TokenCert) {
-	log.Println("Carregando certificados via wrapper pkcs11")
 	tokenCerts, _ := getElegibleCertificates()
 	ch <- tokenCerts
 }

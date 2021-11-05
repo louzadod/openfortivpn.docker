@@ -21,8 +21,10 @@ RUN set -ex;                                    \
 RUN ln -s /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1 /usr/lib/x86_64-linux-gnu/libcrypto.so
 
 ARG DRIVER_URL="http://repositorio.serpro.gov.br/drivers/safenet/SafeNetAuthenticationClient-9.1_Linux_Ubuntu-RedHat(32-64bits).zip"
+COPY SHA1SUMS .
 RUN set -ex;                                                                  \
     wget "$DRIVER_URL" -O /tmp/safenet.zip;                                   \
+    sha1sum -c SHA1SUMS;                                                      \
     unzip /tmp/safenet.zip -d /tmp/;                                          \
     dpkg -i /tmp/SafenetAuthenticationClient-BR-10.0.37-0_amd64.deb;          \
     rm -rfv /tmp/* /usr/bin/SAC*;                                             \

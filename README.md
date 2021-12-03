@@ -28,3 +28,38 @@ E só! 🤓
 
 * `vpn reconfigure`: abre formulário de configuração da VPN
 * `vpn edit`: permite edição manual do arquivo de configuração
+
+## FAQ
+
+### Por que utilizar --network=host?
+
+Para a VPN funcionar, o `openfortivpn` cria uma interface `ppp` e adiciona
+rotas IP estáticas à tabela de roteamento do kernel. Por exemplo, ele pode
+rotear todas as conexões com destino a 172.16.0.0/12 para a interface `ppp0`.
+
+Se não utilizássemos `--network=host`, essas rotas só funcionariam dentro do
+próprio container.
+
+### Por que subir o container com --privileged?
+
+O `openfortivpn` precisa de permissões para criar uma interface `ppp0` via
+`ppdd` e, para isso, precisa de acesso ao `/dev` do host.
+
+Na prática, rodar o `openfortivpn` dentro de um container com `--privileged`
+e `--network=host` é a *mesma coisa* que rodar `sudo openfortivpn` no host.
+
+### Por que preciso montar o /etc/resolv.conf dentro do container?
+
+Além de criar uma interface `ppp` e adicionar rotas IP, o `openfortivpn`
+também precisa configurar o DNS para que o cliente possa acessar os domínios
+da rede sob a VPN.
+
+### Qual a função do utilitário `vpnconfig`?
+
+Nada mais que um formulário que permite criar um arquivo de configuração
+do `openfortivpn` sem passar por toda aquela cerimônia de identificação
+de certificados.
+
+Ele detecta automaticamente os certificados disponíveis e elegíveis do token
+e guarda no atributo `user-cert` do arquivo de configuração. Caso haja mais
+de um certificado elegível, o usuário pode escolher qual usar.

@@ -43,7 +43,7 @@ próprio container.
 ### Por que subir o container com --privileged?
 
 O `openfortivpn` precisa de permissões para criar uma interface `ppp0` via
-`ppdd` e, para isso, precisa de acesso ao `/dev` do host.
+`pppd` e, para isso, precisa de acesso ao `/dev` do host.
 
 Na prática, rodar o `openfortivpn` dentro de um container com `--privileged`
 e `--network=host` é a *mesma coisa* que rodar `sudo openfortivpn` no host.

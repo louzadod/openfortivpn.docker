@@ -56,10 +56,11 @@ da rede sob a VPN.
 
 ### Qual a função do utilitário `vpnconfig`?
 
-Nada mais que um formulário que permite criar um arquivo de configuração
-do `openfortivpn` sem passar por toda aquela cerimônia de identificação
-de certificados.
+Nada mais do que um formulário que permite criar um arquivo de configuração do
+`openfortivpn` sem passar por toda aquela cerimônia de identificação de
+certificados.
 
-Ele detecta automaticamente os certificados disponíveis e elegíveis do token
-e guarda no atributo `user-cert` do arquivo de configuração. Caso haja mais
-de um certificado elegível, o usuário pode escolher qual usar.
+Ele detecta automaticamente os certificados elegíveis do token bem como o
+hash do certificado do servidor e os guarda nos respectivos atributos do arquivo
+de configuração. Caso haja mais de um certificado elegível no token, o usuário
+pode escolher qual usar.

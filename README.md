@@ -31,7 +31,8 @@ E só! 🤓
 
 ## FAQ
 
-### Por que utilizar --network=host?
+<details>
+<summary>Por que utilizar --network=host?</summary>
 
 Para a VPN funcionar, o `openfortivpn` cria uma interface `ppp` e adiciona
 rotas IP estáticas à tabela de roteamento do kernel. Por exemplo, ele pode
@@ -39,8 +40,10 @@ rotear todas as conexões com destino a 172.16.0.0/12 para a interface `ppp0`.
 
 Se não utilizássemos `--network=host`, essas rotas só funcionariam dentro do
 próprio container.
+</details>
 
-### Por que subir o container com --privileged?
+<details>
+<summary>Por que subir o container com --privileged?</summary>
 
 O `openfortivpn` precisa de permissões para criar uma interface `ppp0` via
 `pppd` e para acessar o token via USB. Para isso, precisa de acesso ao
@@ -54,14 +57,18 @@ com `--cap-add=NET_ADMIN`, utilizar --privileged é muito mais simples.
 Na prática, rodar o `openfortivpn` dentro de um container com `--privileged`
 e `--network=host` é a **mesma coisa** que rodar `sudo openfortivpn` diretamente
 no host.
+</details>
 
-### Por que preciso montar o /etc/resolv.conf dentro do container?
+<details>
+<summary>Por que preciso montar o /etc/resolv.conf dentro do container?</summary>
 
 Além de criar uma interface `ppp` e adicionar rotas IP, o `openfortivpn`
 também precisa configurar o DNS para que o cliente possa acessar os domínios
 da rede sob a VPN.
+</details>
 
-### Qual a função do utilitário `vpnconfig`?
+<details>
+<summary>Qual a função do utilitário `vpnconfig`?</summary>
 
 Nada mais do que um formulário que permite criar um arquivo de configuração do
 `openfortivpn` sem passar por toda aquela cerimônia de identificação de
@@ -71,3 +78,4 @@ Ele detecta automaticamente os certificados elegíveis do token bem como o
 hash do certificado do servidor e os guarda nos respectivos atributos do arquivo
 de configuração. Caso haja mais de um certificado elegível no token, o usuário
 pode escolher qual usar.
+</details>

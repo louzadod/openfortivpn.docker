@@ -43,10 +43,17 @@ próprio container.
 ### Por que subir o container com --privileged?
 
 O `openfortivpn` precisa de permissões para criar uma interface `ppp0` via
-`pppd` e, para isso, precisa de acesso ao `/dev` do host.
+`pppd` e para acessar o token via USB. Para isso, precisa de acesso ao
+`/dev` do host. Além disso, o `pppd` requer a _capability_ `NET_ADMIN` para
+funcionar.
+
+Embora seja possível conceder permissões de acesso para cada dispositivo individualmente
+via `--device=/dev/ppp --device=/dev/bus/usb/xxx/yyy` e adicionar a _capability_
+com `--cap-add=NET_ADMIN`, utilizar --privileged é muito mais simples.
 
 Na prática, rodar o `openfortivpn` dentro de um container com `--privileged`
-e `--network=host` é a *mesma coisa* que rodar `sudo openfortivpn` no host.
+e `--network=host` é a **mesma coisa** que rodar `sudo openfortivpn` diretamente
+no host.
 
 ### Por que preciso montar o /etc/resolv.conf dentro do container?
 

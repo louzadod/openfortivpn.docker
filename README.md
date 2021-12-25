@@ -50,19 +50,20 @@ Por que o container precisa de permissões em determinados <em>devices</em>
 e da capacidade <code>NET_ADMIN</code>?
 </summary>
 
-O `openfortivpn` precisa de permissões de acesso ao `/dev/ppp` do host para
-criar uma interface `ppp` e ao `/dev/usb` para ler os certificados do token USB.
+O openfortivpn precisa de permissões de acesso ao `/dev/ppp` do host para
+criar uma interface de rede `ppp` e ao `/dev/usb` para ler os certificados
+do token USB.
 
 Idealmente, passaríamos apenas o _device_ do token USB (`--device=/dev/bus/usb/$BUS/$DEVICE`),
 mas precisaríamos de algum script para determinar os valores `$BUS` e `$DEVICE`
 que formam o caminho do dispositivo.
 
 Já a _capability_ `NET_ADMIN` é um [requisito do driver `ppp`](https://git.io/Jys2R)
-(é exatamente por isso que o `openfortivpn` exige o `sudo` pra rodar fora do container).
+(é por esse motivo que o openfortivpn exige o `sudo` pra rodar fora do container).
 
 Para simplificar, essas flags poderiam ser substituídas por `--privileged` e teríamos
-o equivalente a rodar `sudo openfortivpn` diretamente no host. Porém, passar permissões
-específicas deixa mais explícito qual o nível de acesso do container.
+o equivalente a rodar `sudo openfortivpn` diretamente no host. Porém, passar amplas
+permissões ocultaria o exato nível de acesso do container.
 </details>
 
 <details>

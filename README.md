@@ -11,7 +11,7 @@ inicialização do seu shell (`~/.bashrc` se você usa Bash; `~/.zshrc`, se ZSH)
 
 ```bash
 # `sudo` é opcional se seu usuário pertencer ao grupo `docker`
-alias vpn="sudo docker run --rm -ti --network=host --privileged -v ~/.config/openfortivpn:/vpn -v /etc/resolv.conf:/etc/resolv.conf openfortivpn"
+alias vpn="sudo docker run --rm -ti --network=host --device=/dev/bus/usb --device=/dev/ppp --cap-add=NET_ADMIN -v ~/.config/openfortivpn:/vpn -v /etc/resolv.conf:/etc/resolv.conf openfortivpn"
 ```
 
 > **Atenção!** A criação do `alias` não afeta os terminais que já estavam
@@ -45,21 +45,24 @@ próprio container.
 </details>
 
 <details>
-<summary>Por que subir o container com --privileged?</summary>
+<summary>
+Por que o container precisa de permissões em determinados <em>devices</em>
+e da capacidade <code>NET_ADMIN</code>?
+</summary>
 
-O `openfortivpn` precisa de permissões ao `/dev` do host para criar uma
-interface `ppp0` via `pppd` e para ler o token USB. Além disso,
-o `pppd` requer a _capability_ `NET_ADMIN` para funcionar.
+O `openfortivpn` precisa de permissões de acesso ao `/dev/ppp` do host para
+criar uma interface `ppp` e ao `/dev/usb` para ler os certificados do token USB.
 
-Embora seja possível conceder permissões de acesso para cada dispositivo
-individualmente via `--device=/dev/ppp --device=/dev/bus/usb/xxx/yyy` e
-adicionar a _capability_ com `--cap-add=NET_ADMIN`, utilizar `--privileged`
-é mais simples, uma vez que não é preciso nenhum script para determinar os
-valores `xxx` e `yyy` que formam o caminho do dispositivo USB do token.
+Idealmente, passaríamos apenas o _device_ do token USB (`--device=/dev/bus/usb/$BUS/$DEVICE`),
+mas precisaríamos de algum script para determinar os valores `$BUS` e `$DEVICE`
+que formam o caminho do dispositivo.
 
-Na prática, rodar o `openfortivpn` dentro de um container com `--privileged`
-e `--network=host` é equivalente a rodar `sudo openfortivpn` diretamente
-no host.
+Já a _capability_ `NET_ADMIN` é um [requisito do driver `ppp`](https://git.io/Jys2R)
+(é exatamente por isso que o `openfortivpn` exige o `sudo` pra rodar fora do container).
+
+Para simplificar, essas flags poderiam ser substituídas por `--privileged` e teríamos
+o equivalente a rodar `sudo openfortivpn` diretamente no host. Porém, passar permissões
+específicas deixa mais explícito qual o nível de acesso do container.
 </details>
 
 <details>

@@ -6,15 +6,17 @@ Clone este repositório e construa a imagem:
 docker build -t openfortivpn:latest .
 ```
 
-Crie o `alias` de execução adicionando o seguinte trecho ao arquivo de inicialização do seu shell (`~/.bashrc` se você usa Bash; `~/.zshrc`, se ZSH):
+Crie o `alias` de execução adicionando o seguinte trecho ao arquivo de
+inicialização do seu shell (`~/.bashrc` se você usa Bash; `~/.zshrc`, se ZSH):
 
 ```bash
-# `sudo` é opcional se seu usário pertencer ao grupo `docker`
+# `sudo` é opcional se seu usuário pertencer ao grupo `docker`
 alias vpn="sudo docker run --rm -ti --network=host --privileged -v ~/.config/openfortivpn:/vpn -v /etc/resolv.conf:/etc/resolv.conf openfortivpn"
 ```
 
-> **Atenção!** A criação do `alias` não afeta os terminais que já estavam abertos. Portanto, após ajustar
-o arquivo de inicialização do shell, abra um outro terminal ou recarregue-o com `source ~/.bashrc` ou `source ~/.zshrc`.
+> **Atenção!** A criação do `alias` não afeta os terminais que já estavam
+abertos. Portanto, após ajustar o arquivo de inicialização do shell, abra
+um outro terminal ou recarregue-o com `source ~/.bashrc` ou `source ~/.zshrc`.
 
 Inicie a VPN:
 
@@ -45,17 +47,18 @@ próprio container.
 <details>
 <summary>Por que subir o container com --privileged?</summary>
 
-O `openfortivpn` precisa de permissões para criar uma interface `ppp0` via
-`pppd` e para acessar o token via USB. Para isso, precisa de acesso ao
-`/dev` do host. Além disso, o `pppd` requer a _capability_ `NET_ADMIN` para
-funcionar.
+O `openfortivpn` precisa de permissões ao `/dev` do host para criar uma
+interface `ppp0` via `pppd` e para ler o token USB. Além disso,
+o `pppd` requer a _capability_ `NET_ADMIN` para funcionar.
 
-Embora seja possível conceder permissões de acesso para cada dispositivo individualmente
-via `--device=/dev/ppp --device=/dev/bus/usb/xxx/yyy` e adicionar a _capability_
-com `--cap-add=NET_ADMIN`, utilizar --privileged é muito mais simples.
+Embora seja possível conceder permissões de acesso para cada dispositivo
+individualmente via `--device=/dev/ppp --device=/dev/bus/usb/xxx/yyy` e
+adicionar a _capability_ com `--cap-add=NET_ADMIN`, utilizar `--privileged`
+é mais simples, uma vez que não é preciso nenhum script para determinar os
+valores `xxx` e `yyy` que formam o caminho do dispositivo USB do token.
 
 Na prática, rodar o `openfortivpn` dentro de um container com `--privileged`
-e `--network=host` é a **mesma coisa** que rodar `sudo openfortivpn` diretamente
+e `--network=host` é equivalente a rodar `sudo openfortivpn` diretamente
 no host.
 </details>
 

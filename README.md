@@ -33,6 +33,7 @@ E só! 🤓
 
 ## FAQ
 
+<!-- markdownlint-disable no-inline-html -->
 <details>
 <summary>Por que utilizar --network=host?</summary>
 

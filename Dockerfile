@@ -24,7 +24,7 @@ ARG DRIVER_URL="http://repositorio.serpro.gov.br/drivers/safenet/SafeNetAuthenti
 COPY SHA256SUMS .
 RUN set -ex;                                                                  \
     wget "$DRIVER_URL" -O /tmp/safenet.zip;                                   \
-    sha256sum -c SHA256SUMS;                                                      \
+    sha256sum -c SHA256SUMS;                                                  \
     unzip /tmp/safenet.zip -d /tmp/;                                          \
     dpkg -i /tmp/SafenetAuthenticationClient-BR-10.0.37-0_amd64.deb;          \
     rm -rfv /tmp/* /usr/bin/SAC*;                                             \

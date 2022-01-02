@@ -4,7 +4,7 @@ WORKDIR /app
 ADD vpnconfig .
 RUN go build -ldflags "-w"
 
-FROM ubuntu:21.04
+FROM debian:bullseye
 
 RUN set -ex;                                    \
     apt-get update;                             \

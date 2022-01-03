@@ -102,7 +102,7 @@ Crie um arquivo de regras do `udev` e uma unidade service do `systemd`:
 **/etc/udev/rules.d/99-eToken.rules**:
 
 _Ajuste o `idVendor` e o `idProduct` de acordo com o token. O Aladdin eToken
-é 0529:0600; o 5110, 0529:0620. Para conferir o identificador do seu token
+é 0529:0600; o Safenet 5110, 0529:0620. Para conferir o identificador do seu token
 utilize o comando `lsusb`_
 
 ```cfg

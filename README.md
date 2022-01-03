@@ -1,4 +1,4 @@
-# FortiClient VPN no Linux com token Aladdin eToken Pro
+# FortiClient VPN no Linux com tokens Aladdin eToken Pro e Safenet 5110
 
 Clone este repositório e construa a imagem:
 
@@ -57,14 +57,14 @@ do token USB.
 
 Idealmente, passaríamos apenas o _device_ do token USB (`--device=/dev/bus/usb/$BUS/$DEVICE`),
 mas precisaríamos de algum script para determinar os valores `$BUS` e `$DEVICE`
-que formam o caminho do dispositivo.
+que formam o caminho do dispositivo, uma vez que eles não são determinísticos.
 
 Já a _capability_ `NET_ADMIN` é um [requisito do driver `ppp`](https://git.io/Jys2R)
 (é por esse motivo que o openfortivpn exige o `sudo` pra rodar fora do container).
 
 Para simplificar, essas flags poderiam ser substituídas por `--privileged` e teríamos
 o equivalente a rodar `sudo openfortivpn` diretamente no host. Porém, passar amplas
-permissões ocultaria o exato nível de acesso do container.
+permissões ocultaria o nível exato de acesso do container.
 </details>
 
 <details>

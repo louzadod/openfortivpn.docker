@@ -87,3 +87,51 @@ hash do certificado do servidor e os guarda nos respectivos atributos do arquivo
 de configuração. Caso haja mais de um certificado elegível no token, o usuário
 pode escolher qual usar.
 </details>
+
+<details>
+<summary>
+Como condicionar a inicialização/desligamento da VPN à inserção/remoção do token?
+</summary>
+
+Para inicializar a VPN automaticamente, o PIN do token deve estar salvo no
+arquivo de configuração. Caso não esteja, execute `vpn reconfigure` para
+reconfigurar os atributos da VPN e repassar o PIN.
+
+Crie um arquivo de regras do `udev` e uma unidade service do `systemd`:
+
+**/etc/udev/rules.d/99-eToken.rules**:
+
+```cfg
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0529", ATTRS{idProduct}=="0600", TAG+="systemd", SYMLINK+="meutoken"
+```
+
+**/etc/systemd/system/openfortivpn.service**:
+
+_substitua `$USUARIO$` pelo nome correto do usuário_
+
+```ini
+[Unit]
+Wants=pcscd.service
+BindsTo=dev-meutoken.device
+
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Restart=always
+RestartSec=1
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStart=bash -c 'docker run --rm --name %n --network=host --device=$$(readlink -f /dev/meutoken) --device=/dev/ppp --cap-add=NET_ADMIN -v /home/$USUARIO$/.config/openfortivpn:/vpn -v /etc/resolv.conf:/etc/resolv.conf localhost/openfortivpn'
+
+[Install]
+WantedBy=dev-meutoken.device
+```
+
+Reincie o `systemd` e o `udev` para que as regras sejam aplicadas:
+
+```bash
+sudo udevadm control --reload
+sudo systemctl daemon-reload
+```
+
+</details>

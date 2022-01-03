@@ -106,7 +106,8 @@ _Ajuste o `idVendor` e o `idProduct` de acordo com o token. O Aladdin eToken
 utilize o comando `lsusb`_
 
 ```cfg
-SUBSYSTEM=="usb", ATTRS{idVendor}=="0529", ATTRS{idProduct}=="0600", TAG+="systemd", SYMLINK+="meutoken"
+ACTION=="add", SUBSYSTEM=="usb" , ATTRS{idVendor}=="0529", ATTRS{idProduct}=="0600", TAG+="systemd", ENV{SYSTEMD_ALIAS}="/dev/meutoken"
+ACTION=="remove", SUBSYSTEM=="usb", ENV{PRODUCT}=="529/600/*", TAG+="systemd"
 ```
 
 **/etc/systemd/system/openfortivpn.service**:
@@ -125,8 +126,8 @@ Wants=network-online.target
 Restart=always
 RestartSec=1
 ExecStartPre=-/usr/bin/docker rm %n
-ExecStartPre=sleep 2
-ExecStart=bash -c 'docker run --rm --name %n --network=host --device=$$(readlink -f /dev/meutoken) --device=/dev/ppp --cap-add=NET_ADMIN -v /home/$USUARIO$/.config/openfortivpn:/vpn -v /etc/resolv.conf:/etc/resolv.conf localhost/openfortivpn'
+ExecStartPre=/bin/sleep 2
+ExecStart=/usr/bin/docker run --rm --name %n --network=host --device=/dev/bus/usb --device=/dev/ppp --cap-add=NET_ADMIN -v /home/$USUARIO$/.config/openfortivpn:/vpn -v /etc/resolv.conf:/etc/resolv.conf localhost/openfortivpn
 
 [Install]
 WantedBy=dev-meutoken.device
@@ -137,6 +138,12 @@ Reincie o `systemd` e o `udev` para que as regras sejam aplicadas:
 ```bash
 sudo udevadm control --reload
 sudo systemctl daemon-reload
+```
+
+Habilite o servico:
+
+```bash
+sudo systemctl enable openfortivpn
 ```
 
 Para acompanhar os logs do serviço, execute:

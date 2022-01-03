@@ -138,7 +138,7 @@ sudo udevadm control --reload
 sudo systemctl daemon-reload
 ```
 
-Para acompanhar os logs do serivço, execute:
+Para acompanhar os logs do serviço, execute:
 
 ```bash
 sudo journalctl -fu openfortivpn.service

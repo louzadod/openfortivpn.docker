@@ -125,6 +125,7 @@ Wants=network-online.target
 Restart=always
 RestartSec=1
 ExecStartPre=-/usr/bin/docker rm %n
+ExecStartPre=sleep 2
 ExecStart=bash -c 'docker run --rm --name %n --network=host --device=$$(readlink -f /dev/meutoken) --device=/dev/ppp --cap-add=NET_ADMIN -v /home/$USUARIO$/.config/openfortivpn:/vpn -v /etc/resolv.conf:/etc/resolv.conf localhost/openfortivpn'
 
 [Install]

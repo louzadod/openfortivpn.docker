@@ -25,8 +25,10 @@ COPY SHA256SUMS .
 RUN wget "$DRIVER_URL" -O /tmp/safenet.zip;                                   \
     sha256sum -c SHA256SUMS;                                                  \
     unzip /tmp/safenet.zip -d /tmp/;                                          \
-    dpkg -i /tmp/SafenetAuthenticationClient-BR-10.0.37-0_amd64.deb;          \
-    rm -rfv /tmp/* /usr/bin/SAC*;                                             \
+    dpkg -x /tmp/SafenetAuthenticationClient-BR-10.0.37-0_amd64.deb /;        \
+    mv /usr/share/eToken/drivers/aks-ifdh.bundle /usr/lib/pcsc/drivers;       \
+    ln -s libAksIfdh.so.10.0                                                  \
+      /usr/lib/pcsc/drivers/aks-ifdh.bundle/Contents/Linux/libAksIfdh.so;     \
     mkdir -p /etc/pkcs11/modules;                                             \
     echo "module: /usr/lib/libeToken.so" > /etc/pkcs11/modules/safenet.conf;  \
     echo "enable-in:" > /etc/pkcs11/modules/p11-kit-trust.module;

@@ -4,7 +4,7 @@ WORKDIR /app
 COPY vpnconfig .
 RUN go build -ldflags "-w"
 
-FROM debian:bullseye
+FROM debian:bullseye-slim
 
 RUN set -ex;                                    \
     apt-get update;                             \

@@ -33,7 +33,7 @@ RUN set -ex;                                                                  \
     mv /usr/share/eToken/drivers/aks-ifdh.bundle /usr/lib/pcsc/drivers;       \
     ln -s libAksIfdh.so.10.0                                                  \
       /usr/lib/pcsc/drivers/aks-ifdh.bundle/Contents/Linux/libAksIfdh.so;     \
-  # configura modulos do safenet e desativa o módulo de lookup padrão
+  # configura módulo do safenet e desativa o módulo de lookup padrão
     mkdir -p /etc/pkcs11/modules;                                             \
     echo "module: /usr/lib/libeToken.so" > /etc/pkcs11/modules/safenet.conf;  \
     echo "enable-in:" > /etc/pkcs11/modules/p11-kit-trust.module;

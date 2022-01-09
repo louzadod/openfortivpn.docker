@@ -25,7 +25,7 @@ COPY SHA256SUMS entrypoint.sh /
 ARG DRIVER_URL="http://repositorio.serpro.gov.br/drivers/safenet/SafeNetAuthenticationClient-9.1_Linux_Ubuntu-RedHat(32-64bits).zip"
 RUN set -ex;                                                                  \
     # baixa o driver e bate o sha256
-    wget "$DRIVER_URL" -O /tmp/safenet.zip;                                   \
+    wget --progress=dot:giga "$DRIVER_URL" -O /tmp/safenet.zip;               \
     sha256sum -c SHA256SUMS;                                                  \
     unzip /tmp/safenet.zip -d /tmp/;                                          \
     

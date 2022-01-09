@@ -24,16 +24,13 @@ COPY SHA256SUMS entrypoint.sh /
 
 ARG DRIVER_URL="http://repositorio.serpro.gov.br/drivers/safenet/SafeNetAuthenticationClient-9.1_Linux_Ubuntu-RedHat(32-64bits).zip"
 RUN set -ex;                                                                  \
-  # baixa o driver e bate o sha256
     wget --progress=dot:giga "$DRIVER_URL" -O /tmp/safenet.zip;               \
     sha256sum -c SHA256SUMS;                                                  \
     unzip /tmp/safenet.zip -d /tmp/;                                          \
-  # instala o driver manualmente para evitar a execução do postinst do pacote
     dpkg -x /tmp/SafenetAuthenticationClient-BR-10.0.37-0_amd64.deb /;        \
     mv /usr/share/eToken/drivers/aks-ifdh.bundle /usr/lib/pcsc/drivers;       \
     ln -s libAksIfdh.so.10.0                                                  \
       /usr/lib/pcsc/drivers/aks-ifdh.bundle/Contents/Linux/libAksIfdh.so;     \
-  # configura módulo do safenet e desativa o módulo de lookup padrão
     mkdir -p /etc/pkcs11/modules;                                             \
     echo "module: /usr/lib/libeToken.so" > /etc/pkcs11/modules/safenet.conf;  \
     echo "enable-in:" > /etc/pkcs11/modules/p11-kit-trust.module;

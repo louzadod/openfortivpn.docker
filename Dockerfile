@@ -16,9 +16,9 @@ RUN set -ex;                                    \
       pcscd                                     \
       unzip                                     \
       wget;                                     \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/*;                \
+    ln -s libcrypto.so.1.1 /usr/lib/x86_64-linux-gnu/libcrypto.so
 
-RUN ln -s /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1 /usr/lib/x86_64-linux-gnu/libcrypto.so
 
 ARG DRIVER_URL="http://repositorio.serpro.gov.br/drivers/safenet/SafeNetAuthenticationClient-9.1_Linux_Ubuntu-RedHat(32-64bits).zip"
 COPY SHA256SUMS .

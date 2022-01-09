@@ -1,7 +1,7 @@
 FROM golang as builder
 
 WORKDIR /app
-ADD vpnconfig .
+COPY vpnconfig .
 RUN go build -ldflags "-w"
 
 FROM debian:bullseye

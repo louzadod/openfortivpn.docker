@@ -1,30 +1,11 @@
 package main
 
 import (
-	"errors"
-	"net"
 	"os"
-	"strconv"
-
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"gopkg.in/ini.v1"
 )
-
-func ipValidate(ip interface{}) error {
-	if net.ParseIP(ip.(string)) == nil {
-		return errors.New("IP inválido")
-	}
-	return nil
-}
-
-func portValidate(val interface{}) error {
-	port, _ := strconv.Atoi(val.(string))
-	if port < 1 || port > 65536 {
-		return errors.New("porta inválida")
-	}
-	return nil
-}
 
 func ask(defaultValue string, input *survey.Input, validator survey.Validator) string {
 	var result string

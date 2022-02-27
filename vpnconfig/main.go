@@ -72,7 +72,7 @@ func main() {
 		}
 	}
 
-	if err := config.File.SaveTo(*cfg); err != nil {
+	if err = config.Save(*cfg); err != nil {
 		fmt.Printf("Não foi possível salvar as configurações: %s\n", err)
 	}
 }

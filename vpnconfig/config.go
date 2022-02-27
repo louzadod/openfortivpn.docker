@@ -33,8 +33,20 @@ func (c VPNConfig) IsComplete() bool {
 	return req && optional
 }
 
+func (c VPNConfig) DeleteKey(key string) {
+	section := c.File.Section("")
+	section.DeleteKey(key)
+}
+
 func (c VPNConfig) VerifyServer() error {
 	return VerifyHostname(c.Host.Value(), c.Port.Value())
+}
+
+func (c VPNConfig) Save(filename string) error {
+	if !IsIP(c.Host.Value()) {
+		c.DeleteKey("trusted-cert")
+	}
+	return c.File.SaveTo(filename)
 }
 
 func (c VPNConfig) IsNameBased() bool {

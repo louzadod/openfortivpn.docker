@@ -36,3 +36,7 @@ func (c VPNConfig) IsComplete() bool {
 func (c VPNConfig) VerifyServer() error {
 	return VerifyHostname(c.Host.Value(), c.Port.Value())
 }
+
+func (c VPNConfig) IsNameBased() bool {
+	return IsDNS(c.Host.Value())
+}

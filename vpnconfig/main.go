@@ -33,7 +33,12 @@ func main() {
 		config.Port.SetValue(answer)
 	}
 
-	if *reconfigure || config.TrustedCert.Value() == "" {
+	if config.IsNameBased() {
+		if err = config.VerifyServer(); err != nil {
+			fmt.Printf("%s Não foi possível validar o certificado de [%s]:\n  %s\n", redDot, config.Host.Value(), err)
+			os.Exit(1)
+		}
+	} else if *reconfigure || config.TrustedCert.Value() == "" {
 		var result string
 		if result, err = getServerCertificateHash(config.Host, config.Port); err != nil {
 			fmt.Println(err)

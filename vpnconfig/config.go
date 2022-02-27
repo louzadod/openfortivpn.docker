@@ -28,5 +28,7 @@ func LoadConfig(cfgFile string) VPNConfig {
 }
 
 func (c VPNConfig) IsComplete() bool {
-	return c.Host.Value() != "" && c.Port.Value() != "" && c.UserCert.Value() != "" && c.TrustedCert.Value() != ""
+	req := c.Host.Value() != "" && c.Port.Value() != "" && c.UserCert.Value() != ""
+	optional := IsDNS(c.Host.Value()) || c.TrustedCert.Value() != ""
+	return req && optional
 }

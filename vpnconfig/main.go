@@ -40,7 +40,7 @@ func main() {
 		}
 	} else if *reconfigure || config.TrustedCert.Value() == "" {
 		var result string
-		if result, err = getServerCertificateHash(config.Host, config.Port); err != nil {
+		if result, err = GetServerCertificateHash(config.Host, config.Port); err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}

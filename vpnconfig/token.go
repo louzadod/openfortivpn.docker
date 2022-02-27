@@ -11,7 +11,7 @@ import (
 var tlsConfig = tls.Config{InsecureSkipVerify: true}
 var netDialer = net.Dialer{Timeout: 10 * time.Second}
 
-func getServerCertificateHash(host fmt.Stringer, port fmt.Stringer) (string, error) {
+func GetServerCertificateHash(host fmt.Stringer, port fmt.Stringer) (string, error) {
 	address := fmt.Sprintf("%s:%s", host, port)
 
 	conn, err := tls.DialWithDialer(&netDialer, "tcp", address, &tlsConfig)

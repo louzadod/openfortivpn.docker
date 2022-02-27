@@ -9,6 +9,7 @@ FROM debian:bullseye-slim
 RUN set -ex;                                    \
     apt-get update;                             \
     apt-get install -y --no-install-recommends  \
+      ca-certificates                           \
       libengine-pkcs11-openssl                  \
       nano                                      \
       openfortivpn                              \

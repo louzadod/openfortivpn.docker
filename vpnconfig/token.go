@@ -23,3 +23,14 @@ func getServerCertificateHash(host fmt.Stringer, port fmt.Stringer) (string, err
 	firstCert := conn.ConnectionState().PeerCertificates[0]
 	return fmt.Sprintf("%x", sha256.Sum256(firstCert.Raw)), nil
 }
+
+func VerifyHostname(host string, port string) error {
+	target := fmt.Sprintf("%s:%s", host, port)
+	conn, err := tls.DialWithDialer(&netDialer, "tcp", target, &tls.Config{})
+	if err != nil {
+		return err
+	} else {
+		defer conn.Close()
+	}
+	return conn.VerifyHostname(host)
+}

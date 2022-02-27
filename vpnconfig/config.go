@@ -32,3 +32,7 @@ func (c VPNConfig) IsComplete() bool {
 	optional := IsDNS(c.Host.Value()) || c.TrustedCert.Value() != ""
 	return req && optional
 }
+
+func (c VPNConfig) VerifyServer() error {
+	return VerifyHostname(c.Host.Value(), c.Port.Value())
+}

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"os"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"gopkg.in/ini.v1"
+	"os"
 )
 
 func ask(defaultValue string, input *survey.Input, validator survey.Validator) string {

@@ -49,7 +49,7 @@ func sel(key *ini.Key, input *survey.Select, tokenCerts []TokenCert) {
 	key.SetValue(tokenCerts[index].url)
 }
 
-var ipQuestion = &survey.Input{Message: "IP do servidor VPN:"}
+var ipQuestion = &survey.Input{Message: "IP ou domínio do servidor da VPN:"}
 var portQuestion = &survey.Input{Message: "Porta:", Default: "443"}
 var certQuestion = &survey.Select{Message: "Selecione o certificado:"}
 

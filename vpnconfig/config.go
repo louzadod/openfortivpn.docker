@@ -29,7 +29,7 @@ func LoadConfig(cfgFile string) VPNConfig {
 
 func (c VPNConfig) IsComplete() bool {
 	req := c.Host.Value() != "" && c.Port.Value() != "" && c.UserCert.Value() != ""
-	optional := IsDNS(c.Host.Value()) || c.TrustedCert.Value() != ""
+	optional := IsDNSName(c.Host.Value()) || c.TrustedCert.Value() != ""
 	return req && optional
 }
 
@@ -50,5 +50,5 @@ func (c VPNConfig) Save(filename string) error {
 }
 
 func (c VPNConfig) IsNameBased() bool {
-	return IsDNS(c.Host.Value())
+	return IsDNSName(c.Host.Value())
 }

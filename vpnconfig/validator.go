@@ -2,22 +2,29 @@ package main
 
 import (
 	"errors"
-	"github.com/asaskevich/govalidator"
 	"net"
+	"regexp"
 	"strconv"
+	"strings"
 )
+
+var DNSName = `^([a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62}){1}(\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*[\._]?$`
+var rxDNSName = regexp.MustCompile(DNSName)
 
 func IsIP(ip string) bool {
 	return net.ParseIP(ip) != nil
 }
 
-func IsDNS(host string) bool {
-	return govalidator.IsDNSName(host)
+func IsDNSName(str string) bool {
+	if str == "" || len(strings.Replace(str, ".", "", -1)) > 255 {
+		return false
+	}
+	return !IsIP(str) && rxDNSName.MatchString(str)
 }
 
 func ipValidate(val interface{}) error {
 	host := val.(string)
-	if IsDNS(host) || IsIP(host) {
+	if IsDNSName(host) || IsIP(host) {
 		return nil
 	}
 	return errors.New("IP ou host inválido")

@@ -34,29 +34,29 @@ func LoadConfig(cfgFile string) VPNConfig {
 	}
 }
 
-func (c VPNConfig) IsComplete() bool {
+func (c *VPNConfig) IsComplete() bool {
 	req := c.Host.Value() != "" && c.Port.Value() != "" && c.UserCert.Value() != ""
 	optional := IsDNSName(c.Host.Value()) || c.TrustedCert.Value() != ""
 	return req && optional
 }
 
-func (c VPNConfig) DeleteKey(key string) {
+func (c *VPNConfig) DeleteKey(key string) {
 	section := c.File.Section("")
 	section.DeleteKey(key)
 }
 
-func (c VPNConfig) VerifyServerHostname() error {
+func (c *VPNConfig) VerifyServerHostname() error {
 	return VerifyHostname(c.Host.Value(), c.Port.Value())
 }
 
-func (c VPNConfig) Save() error {
+func (c *VPNConfig) Save() error {
 	if !IsIP(c.Host.Value()) {
 		c.DeleteKey("trusted-cert")
 	}
 	return c.File.SaveTo(c.FileName)
 }
 
-func (c VPNConfig) IsNameBased() bool {
+func (c *VPNConfig) IsNameBased() bool {
 	return IsDNSName(c.Host.Value())
 }
 

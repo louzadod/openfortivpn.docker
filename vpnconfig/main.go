@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mgutz/ansi"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -22,56 +21,25 @@ func main() {
 
 	tokenChan := GetTokenCertificates()
 
-	if *reconfigure || config.Host.Value() == "" {
-		answer := ask(config.Host.Value(), ipQuestion, ipValidate)
-		config.Host.SetValue(answer)
+	config.AskHost()
+	config.AskPort()
+
+	err = config.VerifyServer()
+	if err != nil {
+		fmt.Printf("%s Não foi possível validar o servidor [%s]:\n  %s\n", redDot, config.Host.Value(), err)
+		os.Exit(1)
 	}
 
-	if *reconfigure || config.Port.Value() == "" {
-		answer := ask(config.Port.Value(), portQuestion, portValidate)
-		config.Port.SetValue(answer)
+	err = config.SelectCertificate(tokenChan)
+	if err != nil {
+		os.Exit(1)
 	}
 
-	if config.IsNameBased() {
-		if err = config.VerifyServer(); err != nil {
-			fmt.Printf("%s Não foi possível validar o certificado de [%s]:\n  %s\n", redDot, config.Host.Value(), err)
-			os.Exit(1)
-		}
-	} else if *reconfigure || config.TrustedCert.Value() == "" {
-		var result string
-		if result, err = GetServerCertificateHash(config.Host, config.Port); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		config.TrustedCert.SetValue(result)
-	}
+	config.ConfirmSavePIN()
 
-	if *reconfigure || config.UserCert.Value() == "" {
-		fmt.Printf("%s Carregando certificados...", blueDot)
-
-		tokenCerts := <-tokenChan
-		switch totalCerts := len(tokenCerts); totalCerts {
-		case 0:
-			fmt.Printf("\r%s Erro! Nenhum certificado foi encontrado.\n", redDot)
-			fmt.Println("  - O token foi inserido?")
-			fmt.Println("  - Existe algum certificado elegível no token?")
-			fmt.Println("  - Há mais de um token conectado?")
-			os.Exit(1)
-		case 1:
-			fmt.Printf("\r%s Só há um certificado elegível no token. Selecionado automaticamente:\n", blueDot)
-			fmt.Printf("  %s\n", ansi.Color(tokenCerts[0].name, "white+d"))
-			config.UserCert.SetValue(tokenCerts[0].url)
-		default:
-			sel(config.UserCert, certQuestion, tokenCerts)
-		}
-
-		if confirm(savePinQuestion) {
-			pinValue := password(enterPinQuestion)
-			config.UserCert.SetValue(fmt.Sprintf("%spin-value=%s", config.UserCert.Value(), pinValue))
-		}
-	}
-
-	if err = config.Save(*cfg); err != nil {
+	err = config.Save()
+	if err != nil {
 		fmt.Printf("Não foi possível salvar as configurações: %s\n", err)
+		os.Exit(1)
 	}
 }

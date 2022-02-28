@@ -20,8 +20,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	tokenChan := make(chan []TokenCert, 1)
-	go ListCerts(tokenChan)
+	tokenChan := GetTokenCertificates()
 
 	if *reconfigure || config.Host.Value() == "" {
 		answer := ask(config.Host.Value(), ipQuestion, ipValidate)

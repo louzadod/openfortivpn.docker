@@ -13,6 +13,12 @@ type TokenCert struct {
 	url  string
 }
 
+func GetTokenCertificates() chan []TokenCert {
+	tokenChan := make(chan []TokenCert, 1)
+	go listCerts(tokenChan)
+	return tokenChan
+}
+
 var searchTemplate = []*pkcs11.Attribute{
 	pkcs11.NewAttribute(pkcs11.CKA_CLASS, pkcs11.CKO_CERTIFICATE),
 }
@@ -22,7 +28,7 @@ var attrTemplate = []*pkcs11.Attribute{
 	pkcs11.NewAttribute(pkcs11.CKA_VALUE, nil),
 }
 
-func ListCerts(ch chan<- []TokenCert) {
+func listCerts(ch chan<- []TokenCert) {
 	tokenCerts, _ := getElegibleCertificates()
 	ch <- tokenCerts
 }

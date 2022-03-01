@@ -110,8 +110,8 @@ func (c *VPNConfig) TrustServer() error {
 
 func (c *VPNConfig) VerifyServer() error {
 	if c.IsNameBased() {
-		return c.VerifyServerHostname();
+		return c.VerifyServerHostname()
 	} else {
-		return c.TrustServer();
+		return c.TrustServer()
 	}
 }

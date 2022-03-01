@@ -89,6 +89,13 @@ pode escolher qual usar.
 </details>
 
 <details>
+<summary>Como tratar o erro [PKCS11 ENGINE_load_private_key: error:26096080:engine routines:ENGINE_load_private_key:failed loading private key]?</summary>
+
+Esse erro informa que o PIN do token foi inserido incorretamente. Se você
+optou por guardá-lo no arquivo de configuração, corrija-o com `vpn reconfigure`.
+</details>
+
+<details>
 <summary>
 Como condicionar a inicialização/desligamento da VPN à inserção/remoção do token?
 </summary>

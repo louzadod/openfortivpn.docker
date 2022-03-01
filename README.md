@@ -132,6 +132,7 @@ Wants=network-online.target
 [Service]
 Restart=always
 RestartSec=1
+StartLimitBurst=3
 ExecStartPre=-/usr/bin/docker rm %n
 ExecStartPre=/bin/sleep 2
 ExecStart=/usr/bin/docker run --rm --name %n --network=host --device=/dev/bus/usb --device=/dev/ppp --cap-add=NET_ADMIN -v /home/$USUARIO$/.config/openfortivpn:/vpn -v /etc/resolv.conf:/etc/resolv.conf localhost/openfortivpn

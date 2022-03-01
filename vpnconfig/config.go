@@ -18,20 +18,24 @@ type VPNConfig struct {
 
 var ErrCertsNotFound = errors.New("certs not found")
 
-func LoadConfig(cfgFile string) VPNConfig {
-	iniFile, _ := ini.LoadSources(ini.LoadOptions{
+func LoadConfig(cfgFile string) (*VPNConfig, error) {
+	iniFile, err := ini.LoadSources(ini.LoadOptions{
 		IgnoreInlineComment: true,
 	}, cfgFile)
 
+	if err != nil {
+		return nil, err
+	}
+
 	section := iniFile.Section("")
-	return VPNConfig{
+	return &VPNConfig{
 		FileName:    cfgFile,
 		File:        iniFile,
 		Host:        section.Key("host"),
 		Port:        section.Key("port"),
 		UserCert:    section.Key("user-cert"),
 		TrustedCert: section.Key("trusted-cert"),
-	}
+	}, nil
 }
 
 func (c *VPNConfig) IsComplete() bool {

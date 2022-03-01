@@ -86,7 +86,7 @@ func (c *VPNConfig) SelectCertificate(tokenChan chan []TokenCert) error {
 		c.UserCert.SetValue(tokenCerts[0].url)
 		return nil
 	default:
-		sel(c.UserCert, certQuestion, tokenCerts)
+		c.UserCert.SetValue(sel(certQuestion, tokenCerts))
 		return nil
 	}
 }

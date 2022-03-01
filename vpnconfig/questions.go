@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/AlecAivazis/survey/v2/terminal"
-	"gopkg.in/ini.v1"
 	"os"
 )
 
@@ -37,7 +36,7 @@ func password(input *survey.Password) string {
 	return result
 }
 
-func sel(key *ini.Key, input *survey.Select, tokenCerts []TokenCert) {
+func sel(input *survey.Select, tokenCerts []TokenCert) string {
 	var index int
 	for _, cert := range tokenCerts {
 		input.Options = append(input.Options, cert.name)
@@ -46,7 +45,7 @@ func sel(key *ini.Key, input *survey.Select, tokenCerts []TokenCert) {
 	if err == terminal.InterruptErr {
 		os.Exit(1)
 	}
-	key.SetValue(tokenCerts[index].url)
+	return tokenCerts[index].url
 }
 
 var ipQuestion = &survey.Input{Message: "IP ou domínio do servidor da VPN:"}

@@ -4,7 +4,6 @@ Crie o `alias` de execução adicionando o seguinte trecho ao arquivo de
 inicialização do seu shell (`~/.bashrc` se você usa Bash; `~/.zshrc`, se ZSH):
 
 ```bash
-# `sudo` é opcional se seu usuário pertencer ao grupo `docker`
 alias vpn="sudo docker run --rm -ti --network=host --device=/dev/bus/usb --device=/dev/ppp --cap-add=NET_ADMIN -v ~/.config/openfortivpn:/vpn -v /etc/resolv.conf:/etc/resolv.conf ghcr.io/fabianonunes/openfortivpn.docker:1.5.4"
 ```
 

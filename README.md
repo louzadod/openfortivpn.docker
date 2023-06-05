@@ -100,6 +100,10 @@ por `localhost/openfortivpn:latest`.
 
 Esse erro informa que o PIN do token foi inserido incorretamente. Se você
 optou por guardá-lo no arquivo de configuração, corrija-o com `vpn reconfigure`.
+
+🔴 **CUIDADO**: dependendo das configurações do token, um determinado número de tentativas
+inválidas pode bloquear o PIN. Nesse caso, você precisará do PUK para desbloqueá-lo no aplicativo
+SafeNet Authentication Client no Windows.
 </details>
 
 <details>

@@ -45,7 +45,7 @@ e da capacidade <code>NET_ADMIN</code>?
 </summary>
 
 O openfortivpn precisa de permissões de acesso ao `/dev/ppp` do host para
-criar uma interface de rede `ppp`. Já a permissão ao `/dev/bus/usb` permite
+criar uma interface de rede `ppp`. Já o acesso ao `/dev/bus/usb` permite
 a leitura dos certificados do token USB.
 
 Idealmente, passaríamos apenas o device exato do token USB (`--device=/dev/bus/usb/$BUS/$DEVICE`),

@@ -29,11 +29,11 @@ var attrTemplate = []*pkcs11.Attribute{
 }
 
 func listCerts(ch chan<- []TokenCert) {
-	tokenCerts, _ := getElegibleCertificates()
+	tokenCerts, _ := getAcceptableCertificates()
 	ch <- tokenCerts
 }
 
-func getElegibleCertificates() ([]TokenCert, error) {
+func getAcceptableCertificates() ([]TokenCert, error) {
 	var certs []TokenCert
 
 	p := pkcs11.New("/usr/lib/libeToken.so")

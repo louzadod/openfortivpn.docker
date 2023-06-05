@@ -45,10 +45,10 @@ e da capacidade <code>NET_ADMIN</code>?
 </summary>
 
 O openfortivpn precisa de permissões de acesso ao `/dev/ppp` do host para
-criar uma interface de rede `ppp` e ao `/dev/usb` para ler os certificados
-do token USB.
+criar uma interface de rede `ppp`. Já a permissão ao `/dev/bus/usb` permite
+a leitura dos certificados do token USB.
 
-Idealmente, passaríamos apenas o _device_ do token USB (`--device=/dev/bus/usb/$BUS/$DEVICE`),
+Idealmente, passaríamos apenas o device exato do token USB (`--device=/dev/bus/usb/$BUS/$DEVICE`),
 mas precisaríamos de algum script para determinar os valores `$BUS` e `$DEVICE`
 que formam o caminho do dispositivo, uma vez que eles não são determinísticos.
 

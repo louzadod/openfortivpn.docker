@@ -16,7 +16,7 @@ func main() {
 	kingpin.Parse()
 
 	config, err = LoadConfig(*cfg)
-	if err!= nil {
+	if err != nil {
 		fmt.Printf("%s Não foi possível ler o arquivo de configuração:\n  %s\n", redDot, err)
 		os.Exit(1)
 	}

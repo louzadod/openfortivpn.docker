@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"os"
@@ -12,7 +13,7 @@ func ask(defaultValue string, input *survey.Input, validator survey.Validator) s
 		input.Default = defaultValue
 	}
 	err := survey.AskOne(input, &result, survey.WithValidator(validator))
-	if err == terminal.InterruptErr {
+	if errors.Is(err, terminal.InterruptErr) {
 		os.Exit(1)
 	}
 	return result
@@ -21,7 +22,7 @@ func ask(defaultValue string, input *survey.Input, validator survey.Validator) s
 func confirm(input *survey.Confirm) bool {
 	result := false
 	err := survey.AskOne(input, &result)
-	if err == terminal.InterruptErr {
+	if errors.Is(err, terminal.InterruptErr) {
 		os.Exit(1)
 	}
 	return result
@@ -30,7 +31,7 @@ func confirm(input *survey.Confirm) bool {
 func password(input *survey.Password) string {
 	var result string
 	err := survey.AskOne(input, &result)
-	if err == terminal.InterruptErr {
+	if errors.Is(err, terminal.InterruptErr) {
 		os.Exit(1)
 	}
 	return result
@@ -42,7 +43,7 @@ func sel(input *survey.Select, tokenCerts []TokenCert) string {
 		input.Options = append(input.Options, cert.name)
 	}
 	err := survey.AskOne(certQuestion, &index)
-	if err == terminal.InterruptErr {
+	if errors.Is(err, terminal.InterruptErr) {
 		os.Exit(1)
 	}
 	return tokenCerts[index].url

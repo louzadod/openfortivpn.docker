@@ -23,6 +23,11 @@ func main() {
 
 	if !*reconfigure && config.IsComplete() {
 		config.ConfirmCertificate()
+		err = config.Save()
+		if err != nil {
+			fmt.Printf("Não foi possível salvar as configurações: %s\n", err)
+			os.Exit(1)
+		}
 		os.Exit(0)
 	}
 

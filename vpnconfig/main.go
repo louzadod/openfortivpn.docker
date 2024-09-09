@@ -23,11 +23,7 @@ func main() {
 
 	if !*reconfigure && config.IsComplete() {
 		config.ConfirmCertificate()
-		err = config.Save()
-		if err != nil {
-			fmt.Printf("Não foi possível salvar as configurações: %s\n", err)
-			os.Exit(1)
-		}
+		save(config)
 		os.Exit(0)
 	}
 
@@ -44,8 +40,11 @@ func main() {
 
 	config.ConfirmSavePIN()
 
-	err = config.Save()
-	if err != nil {
+	save(config)
+}
+
+func save(config *VPNConfig) {
+	if err := config.Save(); err != nil {
 		fmt.Printf("Não foi possível salvar as configurações: %s\n", err)
 		os.Exit(1)
 	}

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/mgutz/ansi"
 	"gopkg.in/ini.v1"
+	"os"
 )
 
 type VPNConfig struct {
@@ -49,7 +50,7 @@ func (c *VPNConfig) DeleteKey(key string) {
 	section.DeleteKey(key)
 }
 
-func (c *VPNConfig) VerifyServerHostname() error {
+func (c *VPNConfig) VerifyServerHostname() (string, error) {
 	return VerifyHostname(c.Host.Value(), c.Port.Value())
 }
 
@@ -72,6 +73,21 @@ func (c *VPNConfig) AskPort() {
 func (c *VPNConfig) AskHost() {
 	answer := ask(c.Host.Value(), ipQuestion, ipValidate)
 	c.Host.SetValue(answer)
+}
+
+func (c *VPNConfig) ConfirmCertificate() {
+	if hash, err := c.VerifyServer(); err != nil {
+		if hash == "" {
+			fmt.Printf("%s O servidor não apresentou nenhum certificado\n", redDot)
+			os.Exit(1)
+		}
+		fmt.Printf("%s Não foi possível validar o certificado do servidor\n  Fingerprint: %s\n", redDot, hash)
+		if confirm(invalidCertificateQuestion) {
+			c.TrustedCert.SetValue(hash)
+		} else {
+			os.Exit(1)
+		}
+	}
 }
 
 func (c *VPNConfig) SelectCertificate(tokenChan chan []TokenCert) error {
@@ -102,17 +118,17 @@ func (c *VPNConfig) ConfirmSavePIN() {
 	}
 }
 
-func (c *VPNConfig) TrustServer() error {
+func (c *VPNConfig) TrustServer() (string, error) {
 	var result string
 	var err error
 	if result, err = GetServerCertificateHash(c.Host, c.Port); err != nil {
-		return err
+		return result, err
 	}
 	c.TrustedCert.SetValue(result)
-	return nil
+	return result, nil
 }
 
-func (c *VPNConfig) VerifyServer() error {
+func (c *VPNConfig) VerifyServer() (string, error) {
 	if c.IsNameBased() {
 		return c.VerifyServerHostname()
 	} else {

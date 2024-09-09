@@ -56,4 +56,8 @@ var certQuestion = &survey.Select{Message: "Selecione o certificado:"}
 var savePinQuestion = &survey.Confirm{
 	Message: "Deseja salvar o PIN para não precisar digitá-lo a cada conexão?", Default: true,
 }
+var invalidCertificateQuestion = &survey.Confirm{
+	Message: "Gostaria de se conectar mesmo assim?",
+	Default: false,
+}
 var enterPinQuestion = &survey.Password{Message: "PIN:"}

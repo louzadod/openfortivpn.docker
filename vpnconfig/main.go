@@ -22,6 +22,7 @@ func main() {
 	}
 
 	if !*reconfigure && config.IsComplete() {
+		config.ConfirmCertificate()
 		os.Exit(0)
 	}
 
@@ -29,12 +30,7 @@ func main() {
 
 	config.AskHost()
 	config.AskPort()
-
-	err = config.VerifyServer()
-	if err != nil {
-		fmt.Printf("%s Não foi possível validar o servidor [%s]:\n  %s\n", redDot, config.Host.Value(), err)
-		os.Exit(1)
-	}
+	config.ConfirmCertificate()
 
 	err = config.SelectCertificate(tokenChan)
 	if err != nil {

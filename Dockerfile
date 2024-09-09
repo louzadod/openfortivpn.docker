@@ -41,6 +41,7 @@ RUN set -ex;                                    \
       nano                                      \
       openssl                                   \
       pcscd                                     \
+      ppp                                       \
       unzip                                     \
       wget;                                     \
     rm -rf /var/lib/apt/lists/*;                \

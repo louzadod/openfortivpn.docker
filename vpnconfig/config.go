@@ -77,6 +77,9 @@ func (c *VPNConfig) AskHost() {
 
 func (c *VPNConfig) ConfirmCertificate() {
 	if hash, err := c.VerifyServer(); err != nil {
+		if hash == c.TrustedCert.Value() {
+			return
+		}
 		if hash == "" {
 			fmt.Printf("%s Não foi possível obter um certificado do servidor\n  %s", redDot, err.Error())
 			os.Exit(1)

@@ -1,3 +1,30 @@
+FROM debian:bullseye AS openfortivpn
+
+ARG VERSION=c49663d2
+ARG URL=https://github.com/adrienverge/openfortivpn/archive/
+
+RUN set -ex;                                 \
+  apt-get update;                            \
+  apt-get install -y --no-install-recommends \
+    autoconf                                 \
+    automake                                 \
+    ca-certificates                          \
+    gcc                                      \
+    libc6-dev                                \
+    libssl-dev                               \
+    make                                     \
+    patch                                    \
+    pkg-config                               \
+    wget;                                    \
+  mkdir openfortivpn;                        \
+  cd openfortivpn;                           \
+  wget "$URL/$VERSION.tar.gz";               \
+  tar -xzf "$VERSION.tar.gz"                 \
+     --strip-components 1;                   \
+  ./autogen.sh;                              \
+  ./configure --prefix="";                   \
+  make;
+
 FROM golang:bullseye AS builder
 
 WORKDIR /app
@@ -12,7 +39,6 @@ RUN set -ex;                                    \
       ca-certificates                           \
       libengine-pkcs11-openssl                  \
       nano                                      \
-      openfortivpn                              \
       openssl                                   \
       pcscd                                     \
       unzip                                     \
@@ -36,6 +62,7 @@ RUN set -ex;                                                                  \
     echo "enable-in:" > /etc/pkcs11/modules/p11-kit-trust.module;
 
 COPY --from=builder /app/vpnconfig /usr/bin/vpnconfig
+COPY --from=openfortivpn "/openfortivpn/openfortivpn" /usr/bin/openfortivpn
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["start"]

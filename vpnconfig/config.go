@@ -50,7 +50,7 @@ func (c *VPNConfig) DeleteKey(key string) {
 	section.DeleteKey(key)
 }
 
-func (c *VPNConfig) VerifyServerHostname() (string, error) {
+func (c *VPNConfig) VerifyServerHostname() error {
 	return VerifyHostname(c.Host.Value(), c.Port.Value())
 }
 
@@ -118,20 +118,11 @@ func (c *VPNConfig) ConfirmSavePIN() {
 	}
 }
 
-func (c *VPNConfig) TrustServer() (string, error) {
-	var result string
-	var err error
-	if result, err = GetServerCertificateHash(c.Host, c.Port); err != nil {
-		return result, err
-	}
-	c.TrustedCert.SetValue(result)
-	return result, nil
-}
-
 func (c *VPNConfig) VerifyServer() (string, error) {
-	if c.IsNameBased() {
-		return c.VerifyServerHostname()
-	} else {
-		return c.TrustServer()
+	var hash string
+	var err error
+	if hash, err = GetServerCertificateHash(c.Host, c.Port); err != nil {
+		return "", err
 	}
+	return hash, c.VerifyServerHostname()
 }

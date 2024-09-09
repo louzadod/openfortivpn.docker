@@ -55,7 +55,7 @@ func (c *VPNConfig) VerifyServerHostname() (string, error) {
 }
 
 func (c *VPNConfig) Save() error {
-	if !IsIP(c.Host.Value()) {
+	if c.TrustedCert.Value() == "" {
 		c.DeleteKey("trusted-cert")
 	}
 	return c.File.SaveTo(c.FileName)

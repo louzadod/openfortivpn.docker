@@ -117,6 +117,11 @@ func (c *VPNConfig) SelectCertificate(tokenChan chan []TokenCert) error {
 func (c *VPNConfig) ConfirmSavePIN() {
 	if confirm(savePinQuestion) {
 		pinValue := password(enterPinQuestion)
+		pinConfirm := password(confirmPinQuestion)
+		if pinValue != pinConfirm {
+			fmt.Printf("\r%s Os PINs não coincidem.\n", redDot)
+			os.Exit(1)
+		}
 		c.UserCert.SetValue(fmt.Sprintf("%spin-value=%s", c.UserCert.Value(), pinValue))
 	}
 }

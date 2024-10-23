@@ -61,6 +61,7 @@ var invalidCertificateQuestion = &survey.Confirm{
 	Default: false,
 }
 var enterPinQuestion = &survey.Password{Message: "PIN:"}
+var confirmPinQuestion = &survey.Password{Message: "PIN (confirm):"}
 var lastTryPinQuestion = &survey.Confirm{
 	Message: "Última tentativa do PIN. Deseja continuar mesmo assim?", Default: true,
 }

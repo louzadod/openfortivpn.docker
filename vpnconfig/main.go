@@ -21,6 +21,8 @@ func main() {
 		os.Exit(1)
 	}
 
+	checkToken()
+
 	if !*reconfigure && config.IsComplete() {
 		config.ConfirmCertificate()
 		save(config)
@@ -47,5 +49,24 @@ func save(config *VPNConfig) {
 	if err := config.Save(); err != nil {
 		fmt.Printf("Não foi possível salvar as configurações: %s\n", err)
 		os.Exit(1)
+	}
+}
+
+func checkToken() {
+	info, err := GetTokenInfo()
+	if err != nil {
+		fmt.Printf("%s Não foi possível inicializar o token: %s\n", redDot, err)
+		os.Exit(1)
+	}
+
+	if info.locked {
+		fmt.Printf("%s O PIN do token está bloqueado.\n", redDot)
+		os.Exit(1)
+	}
+
+	if info.finalTry {
+		if !confirm(lastTryPinQuestion) {
+			os.Exit(1)
+		}
 	}
 }

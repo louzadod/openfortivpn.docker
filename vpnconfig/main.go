@@ -21,7 +21,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	checkToken()
+	if !*reconfigure {
+		checkToken()
+	}
 
 	if !*reconfigure && config.IsComplete() {
 		config.ConfirmCertificate()

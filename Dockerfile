@@ -3,6 +3,10 @@ FROM debian:bullseye AS openfortivpn
 ARG VERSION=c49663d2
 ARG URL=https://github.com/adrienverge/openfortivpn/archive/
 
+WORKDIR /openfortivpn
+
+COPY tunnel.patch .
+
 RUN set -ex;                                 \
   apt-get update;                            \
   apt-get install -y --no-install-recommends \
@@ -16,11 +20,10 @@ RUN set -ex;                                 \
     patch                                    \
     pkg-config                               \
     wget;                                    \
-  mkdir openfortivpn;                        \
-  cd openfortivpn;                           \
   wget "$URL/$VERSION.tar.gz";               \
   tar -xzf "$VERSION.tar.gz"                 \
      --strip-components 1;                   \
+  patch -p1 < tunnel.patch;                  \
   ./autogen.sh;                              \
   ./configure --prefix="";                   \
   make;

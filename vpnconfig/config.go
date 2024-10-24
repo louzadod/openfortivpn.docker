@@ -122,7 +122,8 @@ func (c *VPNConfig) ConfirmSavePIN() {
 			fmt.Printf("\r%s Os PINs não coincidem.\n", redDot)
 			os.Exit(1)
 		}
-		c.UserCert.SetValue(fmt.Sprintf("%spin-value=%s", c.UserCert.Value(), pinValue))
+		pinBytes := []byte(pinValue)
+		c.UserCert.SetValue(fmt.Sprintf("%spin-value=%s", c.UserCert.Value(), percentEncode(pinBytes)))
 	}
 }
 

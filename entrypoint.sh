@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 command=$1
+shift
 
 /usr/sbin/pcscd --auto-exit
 
@@ -13,7 +14,7 @@ case $command in
     exec nano /vpn/config.cfg;;
   start)
     vpnconfig /vpn/config.cfg
-    exec openfortivpn --seclevel-1 --config /vpn/config.cfg;;
+    exec openfortivpn --seclevel-1 --config /vpn/config.cfg "$@";;
   view-certificate)
     cert=$(sed -n 's/^user-cert *= *//p' /vpn/config.cfg)
     exec p11tool --export "$cert";;

@@ -45,6 +45,7 @@ RUN set -ex;                                    \
       openssl                                   \
       pcscd                                     \
       ppp                                       \
+      gnutls-bin                                \
       unzip                                     \
       wget;                                     \
     rm -rf /var/lib/apt/lists/*;                \

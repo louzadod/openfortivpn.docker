@@ -14,6 +14,9 @@ case $command in
   start)
     vpnconfig /vpn/config.cfg
     exec openfortivpn --seclevel-1 --config /vpn/config.cfg;;
+  view-certificate)
+    cert=$(sed -n 's/^user-cert *= *//p' /vpn/config.cfg)
+    exec p11tool --export "$cert";;
   *)
     exit 1;;
 esac

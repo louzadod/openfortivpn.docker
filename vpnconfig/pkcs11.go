@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/x509"
+	"errors"
 	"fmt"
 	"github.com/miekg/pkcs11"
 	"net/url"
@@ -11,6 +12,12 @@ import (
 type TokenCert struct {
 	name string
 	url  string
+}
+
+type TokenInfo struct {
+	locked   bool
+	finalTry bool
+	countLow bool
 }
 
 func GetTokenCertificates() chan []TokenCert {
@@ -29,15 +36,52 @@ var attrTemplate = []*pkcs11.Attribute{
 }
 
 func listCerts(ch chan<- []TokenCert) {
-	tokenCerts, _ := getElegibleCertificates()
+	tokenCerts, _ := getAcceptableCertificates()
 	ch <- tokenCerts
 }
 
-func getElegibleCertificates() ([]TokenCert, error) {
+func initToken() (*pkcs11.Ctx, error) {
+	ctx := pkcs11.New("/usr/lib/libeToken.so")
+	err := ctx.Initialize()
+	return ctx, err
+}
+
+func GetTokenInfo() (TokenInfo, error) {
+	info := TokenInfo{}
+
+	ctx, err := initToken()
+	if err != nil {
+		return info, err
+	}
+	defer ctx.Destroy()
+	defer ctx.Finalize()
+
+	slots, err := ctx.GetSlotList(true)
+	if err != nil {
+		return info, err
+	}
+
+	if len(slots) == 0 {
+		// returns empty token error
+		return info, errors.New("not found")
+	}
+
+	tokenInfo, err := ctx.GetTokenInfo(slots[0])
+	if err != nil {
+		return info, err
+	}
+
+	info.locked = tokenInfo.Flags&pkcs11.CKF_USER_PIN_LOCKED != 0
+	info.finalTry = tokenInfo.Flags&pkcs11.CKF_USER_PIN_FINAL_TRY != 0
+	info.countLow = tokenInfo.Flags&pkcs11.CKF_USER_PIN_COUNT_LOW != 0
+
+	return info, nil
+}
+
+func getAcceptableCertificates() ([]TokenCert, error) {
 	var certs []TokenCert
 
-	p := pkcs11.New("/usr/lib/libeToken.so")
-	err := p.Initialize()
+	p, err := initToken()
 	if err != nil {
 		return nil, err
 	}

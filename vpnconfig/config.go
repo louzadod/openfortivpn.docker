@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/mgutz/ansi"
 	"gopkg.in/ini.v1"
+	"os"
 )
 
 type VPNConfig struct {
@@ -54,7 +55,7 @@ func (c *VPNConfig) VerifyServerHostname() error {
 }
 
 func (c *VPNConfig) Save() error {
-	if !IsIP(c.Host.Value()) {
+	if c.TrustedCert.Value() == "" {
 		c.DeleteKey("trusted-cert")
 	}
 	return c.File.SaveTo(c.FileName)
@@ -72,6 +73,24 @@ func (c *VPNConfig) AskPort() {
 func (c *VPNConfig) AskHost() {
 	answer := ask(c.Host.Value(), ipQuestion, ipValidate)
 	c.Host.SetValue(answer)
+}
+
+func (c *VPNConfig) ConfirmCertificate() {
+	if hash, err := c.VerifyServer(); err != nil {
+		if hash == c.TrustedCert.Value() {
+			return
+		}
+		if hash == "" {
+			fmt.Printf("%s Não foi possível obter um certificado do servidor\n  %s", redDot, err.Error())
+			os.Exit(1)
+		}
+		fmt.Printf("%s Não foi possível validar o certificado do servidor\n  Fingerprint: %s\n", redDot, hash)
+		if confirm(invalidCertificateQuestion) {
+			c.TrustedCert.SetValue(hash)
+		} else {
+			os.Exit(1)
+		}
+	}
 }
 
 func (c *VPNConfig) SelectCertificate(tokenChan chan []TokenCert) error {
@@ -98,24 +117,21 @@ func (c *VPNConfig) SelectCertificate(tokenChan chan []TokenCert) error {
 func (c *VPNConfig) ConfirmSavePIN() {
 	if confirm(savePinQuestion) {
 		pinValue := password(enterPinQuestion)
-		c.UserCert.SetValue(fmt.Sprintf("%spin-value=%s", c.UserCert.Value(), pinValue))
+		pinConfirm := password(confirmPinQuestion)
+		if pinValue != pinConfirm {
+			fmt.Printf("\r%s Os PINs não coincidem.\n", redDot)
+			os.Exit(1)
+		}
+		pinBytes := []byte(pinValue)
+		c.UserCert.SetValue(fmt.Sprintf("%spin-value=%s", c.UserCert.Value(), percentEncode(pinBytes)))
 	}
 }
 
-func (c *VPNConfig) TrustServer() error {
-	var result string
+func (c *VPNConfig) VerifyServer() (string, error) {
+	var hash string
 	var err error
-	if result, err = GetServerCertificateHash(c.Host, c.Port); err != nil {
-		return err
+	if hash, err = GetServerCertificateHash(c.Host, c.Port); err != nil {
+		return "", err
 	}
-	c.TrustedCert.SetValue(result)
-	return nil
-}
-
-func (c *VPNConfig) VerifyServer() error {
-	if c.IsNameBased() {
-		return c.VerifyServerHostname()
-	} else {
-		return c.TrustServer()
-	}
+	return hash, c.VerifyServerHostname()
 }

@@ -1,0 +1,18 @@
+diff --git a/src/tunnel.c b/src/tunnel.c
+index 71d8446..ec8b4d2 100644
+--- a/src/tunnel.c
++++ b/src/tunnel.c
+@@ -1347,13 +1347,6 @@ err_tunnel:
+ 	log_info("Closed connection to gateway.\n");
+ 	tunnel.state = STATE_DOWN;
+
+-	if (ssl_connect(&tunnel)) {
+-		log_info("Could not log out.\n");
+-	} else {
+-		auth_log_out(&tunnel);
+-		log_info("Logged out.\n");
+-	}
+-
+ 	// explicitly free the buffer allocated for split routes of the ipv4 configuration
+ 	if (tunnel.ipv4.split_rt != NULL) {
+ 		free(tunnel.ipv4.split_rt);

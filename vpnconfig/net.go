@@ -16,7 +16,7 @@ func GetServerCertificateHash(host fmt.Stringer, port fmt.Stringer) (string, err
 
 	conn, err := tls.DialWithDialer(&netDialer, "tcp", address, &tlsConfig)
 	if err != nil {
-		return "", fmt.Errorf("não foi possível obter o certificado do servidor: %s", err.Error())
+		return "", err
 	} else {
 		defer conn.Close()
 	}
@@ -29,8 +29,7 @@ func VerifyHostname(host string, port string) error {
 	conn, err := tls.DialWithDialer(&netDialer, "tcp", target, &tls.Config{})
 	if err != nil {
 		return err
-	} else {
-		defer conn.Close()
 	}
+	defer conn.Close()
 	return conn.VerifyHostname(host)
 }

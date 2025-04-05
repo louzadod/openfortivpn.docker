@@ -4,7 +4,7 @@ Crie o `alias` de execução adicionando o seguinte trecho ao arquivo de
 inicialização do seu shell (`~/.bashrc` se você usa Bash; `~/.zshrc`, se ZSH):
 
 ```bash
-alias vpn="sudo docker run --rm -ti --network=host --device=/dev/bus/usb --device=/dev/ppp --cap-add=NET_ADMIN -v ~/.config/openfortivpn:/vpn -v /etc/resolv.conf:/etc/resolv.conf ghcr.io/fabianonunes/openfortivpn.docker:1.5.4"
+alias vpn="sudo docker run --rm -ti --network=host --device=/dev/bus/usb --device=/dev/ppp --cap-add=NET_ADMIN -v ~/.config/openfortivpn:/vpn -v /etc/resolv.conf:/etc/resolv.conf ghcr.io/fabianonunes/openfortivpn.docker:1.10.1"
 ```
 
 > **Atenção!** A criação do `alias` não afeta os terminais que já estavam
@@ -45,10 +45,10 @@ e da capacidade <code>NET_ADMIN</code>?
 </summary>
 
 O openfortivpn precisa de permissões de acesso ao `/dev/ppp` do host para
-criar uma interface de rede `ppp` e ao `/dev/usb` para ler os certificados
-do token USB.
+criar uma interface de rede `ppp`. Já o acesso ao `/dev/bus/usb` permite
+a leitura dos certificados do token USB.
 
-Idealmente, passaríamos apenas o _device_ do token USB (`--device=/dev/bus/usb/$BUS/$DEVICE`),
+Idealmente, passaríamos apenas o device exato do token USB (`--device=/dev/bus/usb/$BUS/$DEVICE`),
 mas precisaríamos de algum script para determinar os valores `$BUS` e `$DEVICE`
 que formam o caminho do dispositivo, uma vez que eles não são determinísticos.
 
@@ -100,6 +100,10 @@ por `localhost/openfortivpn:latest`.
 
 Esse erro informa que o PIN do token foi inserido incorretamente. Se você
 optou por guardá-lo no arquivo de configuração, corrija-o com `vpn reconfigure`.
+
+🔴 **CUIDADO**: dependendo das configurações do token, um determinado número de tentativas
+inválidas pode bloquear o PIN. Nesse caso, você precisará do PUK para desbloqueá-lo no aplicativo
+SafeNet Authentication Client no Windows.
 </details>
 
 <details>
